@@ -1,36 +1,27 @@
-version: '2'
+helpy:
+  build: .
+  restart: always
+  volumes:
+    - rails-assets:/helpy/public/assets
+  environment:
+    - POSTGRES_DB=helpy_production
+    - POSTGRES_USER=helpy
+    - POSTGRES_PASSWORD=some_secure_pg_password_change_in_production
+    - SECRET_KEY_BASE=some_secret_key_base_change_in_production
+      #- DO_NOT_PREPARE=true
+  ports:
+    - "80:8080"
+  links:
+    - postgres:postgres
 
-services:
-  helpy:
-    build: .
-    restart: always
-    volumes:
-      - rails-assets:/helpy/public/assets
-    env_file: .env
-    environment:
-      - POSTGRES_DB=helpy_production
-      - POSTGRES_USER=helpy
-      - POSTGRES_PASSWORD=some_secure_pg_password_change_in_production
-      - SECRET_KEY_BASE=some_secret_key_base_change_in_production
-    ports:
-      - "80:8080"
-    environment:
-      - DO_NOT_PREPARE=true
-    depends_on:
-      - postgres
-  postgres:
-    image: postgres:9.4
-    restart: always
-    #env_file: .env
-    environment:
-      - POSTGRES_DB=helpy_production
-      - POSTGRES_USER=helpy
-      - POSTGRES_PASSWORD=some_secure_pg_password_change_in_production
-      - SECRET_KEY_BASE=some_secret_key_base_change_in_production
-    volumes:
-      - ./postgres:/var/lib/postgresql/data
-
-volumes:
-  rails-assets:
-    driver: local
+postgres:
+  image: postgres:9.4
+  restart: always
+  environment:
+    - POSTGRES_DB=helpy_production
+    - POSTGRES_USER=helpy
+    - POSTGRES_PASSWORD=some_secure_pg_password_change_in_production
+    - SECRET_KEY_BASE=some_secret_key_base_change_in_production
+  volumes:
+    - /home/core/dockerdata/postgres:/var/lib/postgresql/data
 
