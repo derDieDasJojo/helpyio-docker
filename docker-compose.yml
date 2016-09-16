@@ -1,8 +1,9 @@
 helpy:
-  build: .
+  #build: .
+  image: derdiedasjojo/helpyio-docker
   restart: always
   volumes:
-    - rails-assets:/helpy/public/assets
+    - /helpy/public
   environment:
     - POSTGRES_DB=helpy_production
     - POSTGRES_USER=helpy
